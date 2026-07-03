@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare+ Pro Portal</title>
+    <!-- LINK TO MANIFEST FOR PWA INSTALLATION -->
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        :root {
+            --bg-dark-sidebar: #090e1a;
+            --bg-dark-main: #0d1527;
+            --bg-card: #141d31;
+            --accent-blue: #2563eb;
+            --accent-blue-hover: #1d4ed8;
+            --text-main: #ffffff;
+            --text-muted: #64748b;
+            --status-taken: #10b981;
+            --status-pending: #f59e0b;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-dark-main);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* AUTH STYLES */
+        .auth-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-dark-main);
+        }
+        .auth-container {
+            width: 420px;
+            background-color: var(--bg-card);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .auth-container h2 { margin: 0; text-align: center; font-size: 26px; font-weight: 700; }
+        .auth-toggle { text-align: center; font-size: 14px; color: var(--text-muted); cursor: pointer; text-decoration: underline; }
+
+        .hidden { display: none !important; }
+
+        /* PREMIUM SIDEBAR STRUCTURE */
+        .sidebar { 
+            width: 260px; 
+            background-color: var(--bg-dark-sidebar); 
+            padding: 30px 24px; 
+            display: flex; 
+            flex-direction: column; 
+            border-right: 1px solid #1e293b;
+            box-sizing: border-box;
+        }
+        .logo-area { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; margin-bottom: 40px; }
+        .logo-icon { background-color: var(--accent-blue); padding: 8px 12px; border-radius: 10px; font-size: 18px; }
+        .logo-subtitle { font-size: 12px; color: var(--text-muted); display: block; font-weight: 400; margin-top: 2px; }
+        
+        .nav-links { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .nav-item { 
+            padding: 14px 16px; 
+            border-radius: 12px; 
+            color: var(--text-muted); 
+            font-weight: 500; 
+            cursor: pointer; 
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+        }
+        .nav-item.active, .nav-item:hover { background-color: var(--accent-blue); color: white; }
+        
+        .logout-sidebar-btn {
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: #ef4444;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+            margin-top: auto;
+        }
+        .logout-sidebar-btn:hover { background-color: rgba(239, 68, 68, 0.1); }
+
+        /* MAIN CONTENT VIEWPORT CONTAINER */
+        .main-content { flex: 1; padding: 40px; display: flex; flex-direction: column; gap: 30px; overflow-y: auto; box-sizing: border-box; }
+        
+        /* HEADER PANEL LAYOUT */
+        .header-area { display: flex; justify-content: space-between; align-items: center; }
+        .header-area h1 { margin: 0; font-size: 28px; font-weight: 700; }
+        .header-area p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 15px; }
+        
+        /* INTERACTIVE TOP MENU BADGES */
+        .top-user-badge { display: flex; align-items: center; gap: 15px; position: relative; }
+        
+        .bell-icon-btn { background-color: var(--bg-card); border: 1px solid #1e293b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; position: relative; }
+        .bell-badge-dot { position: absolute; top: 2px; right: 2px; width: 8px; height: 8px; background-color: red; border-radius: 50%; }
+        
+        .profile-pill { background-color: var(--bg-card); padding: 8px 16px; border-radius: 20px; font-weight: 500; font-size: 14px; display: flex; align-items: center; gap: 8px; border: 1px solid #1e293b; cursor: pointer; transition: background 0.2s; }
+        .profile-pill:hover { background-color: #1e293b; }
+
+        /* DROP-DOWN PANELS SYSTEM */
+        .dropdown-menu-box { position: absolute; top: 50px; right: 0; background-color: var(--bg-card); border: 1px solid #1e293b; border-radius: 12px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 260px; z-index: 100; display: none; }
+        .dropdown-menu-box h4 { margin: 0; border-bottom: 1px solid #1e293b; padding-bottom: 8px; font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
+        .notif-item { font-size: 13px; padding: 8px 0; border-bottom: 1px solid #1d263b; }
+        .notif-item:last-child { border-bottom: none; }
+
+        /* TOP SUMMARY METRICS GRID */
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .metric-card { background-color: var(--bg-card); padding: 24px; border-radius: 16px; display: flex; align-items: center; gap: 20px; border: 1px solid #1e293b; }
+        .metric-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
+        .metric-info h3 { margin: 0; font-size: 32px; font-weight: 700; }
+        .metric-info p { margin: 2px 0 0 0; color: var(--text-muted); font-size: 14px; font-weight: 500; }
+
+        /* DASHBOARD SECTIONS GRID PANELS */
+        .dashboard-row-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
+        .panel { background-color: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid #1e293b; }
+        .panel h2 { margin: 0 0 20px 0; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+
+        /* REMINDER MINI CARDS */
+        .mini-reminder-list { display: flex; flex-direction: column; gap: 12px; }
+        .mini-reminder-item { background: #1a243d; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #243354; }
+        .time-box { color: var(--accent-blue); font-weight: 700; font-size: 16px; width: 80px; }
+        .med-details { flex-grow: 1; }
+        .med-details h4 { margin: 0; font-size: 16px; font-weight: 600; }
+        .med-details p { margin: 4px 0 0 0; color: var(--text-muted); font-size: 13px; }
+        
+        .status-pill { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+        .status-pill.taken { background-color: rgba(16, 185, 129, 0.15); color: var(--status-taken); }
+        .status-pill.pending { background-color: rgba(245, 158, 11, 0.15); color: var(--status-pending); }
+
+        /* ROUND CHART INTERFACE SPECIFICATION */
+        .chart-box-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 200px; }
+        .round-donut-chart { 
+            width: 140px; 
+            height: 140px; 
+            border-radius: 50%; 
+            background: conic-gradient(var(--status-taken) 0% 0%, var(--status-pending) 0% 100%);
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            position: relative;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
+        .round-donut-inner-cutout { width: 100px; height: 100px; background-color: var(--bg-card); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .round-donut-inner-cutout h4 { margin: 0; font-size: 26px; font-weight: 700; }
+        .round-donut-inner-cutout p { margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted); }
+        
+        .chart-legend-grid { display: flex; justify-content: center; gap: 20px; width: 100%; margin-top: 25px; }
+        .legend-indicator-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
+
+        /* TABLES STRUCTURES */
+        .medicine-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .medicine-table th, .medicine-table td { padding: 16px; border-bottom: 1px solid #1e293b; }
+        .medicine-table th { color: var(--text-muted); font-weight: 500; font-size: 14px; }
+        .medicine-table td { font-size: 15px; }
+
+        /* FORMS LAYOUTS */
+        .form-group { margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; font-weight: 500; }
+        input, select { width: 100%; padding: 14px; background-color: var(--bg-dark-main); border: 1px solid #243354; border-radius: 10px; color: white; box-sizing: border-box; font-size: 15px; }
+
+        button.primary-btn { width: 100%; background-color: var(--accent-blue); color: white; padding: 14px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 15px; transition: background 0.2s; }
+        button.primary-btn:hover { background-color: var(--accent-blue-hover); }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 16, 0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .modal-box { background-color: var(--bg-card); padding: 40px; border-radius: 20px; width: 480px; text-align: center; border: 1px solid var(--accent-blue); box-shadow: 0 0 40px rgba(37, 99, 235, 0.3); }
+        .modal-box h2 { color: var(--status-pending); margin-top: 0; font-size: 24px; }
+        .modal-box p { font-size: 18px; margin: 20px 0; color: var(--text-main); }
+        .close-modal-btn { background-color: var(--status-taken); color: #000000; border: none; padding: 14px 35px; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; }
+
+        .footer-credit { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: auto; padding-top: 30px; }
+    </style>
+</head>
+<body>
+
+    <!-- SIGN IN BLOCK -->
+    <div id="authWrapper" class="auth-wrapper">
+        <div id="loginCard" class="auth-container">
+            <h2>🔐 MediCare+ Login</h2>
+            <div class="form-group"><label>User ID</label><input type="text" id="loginUid" placeholder="Enter username" required></div>
+            <div class="form-group"><label>Password</label><input type="password" id="loginPwd" placeholder="••••••••" required></div>
+            <button class="primary-btn" onclick="handleLogin()">Sign In to Portal</button>
+            <div class="auth-toggle" onclick="toggleAuthViews(true)">Create an account for your profile</div>
+        </div>
+
+        <div id="registerCard" class="auth-container hidden">
+            <h2>📝 Profile Registration</h2>
+            <div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="e.g., Chethu Gowda" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>Age</label><input type="number" id="regAge" placeholder="24" required></div>
+                <div class="form-group"><label>Gender</label>
+                    <select id="regGender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
+                </div>
+            </div>
+            <div class="form-group"><label>Date of Birth</label><input type="date" id="regDob" required></div>
+            <div class="form-group"><label>Contact No</label><input type="tel" id="regContact" placeholder="+91 XXXXX XXXXX" required></div>
+            <div class="form-group"><label>Gmail Address</label><input type="email" id="regGmail" placeholder="name@gmail.com" required></div>
+            <div class="form-row">
+                <div class="form-group"><label>User ID</label><input type="text" id="regUid" placeholder="Pick username" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="regPwd" placeholder="Password" required></div>
+            </div>
+            <button class="primary-btn" onclick="handleRegister()">Complete Account Setup</button>
+            <div class="auth-toggle" onclick="toggleAuthViews(false)">Already have an profile setup? Log in</div>
+        </div>
+    </div>
+
+    <!-- MAIN APP WRAPPER (HIDDEN ON FIRST LOAD CLEAN EXIT) -->
+    <div id="appDashboard" class="hidden" style="width: 100%; min-height: 100vh;">
+        <div class="sidebar">
+            <div class="logo-area">
+                <span class="logo-icon">💙</span>
+                <div>MediCare+<span class="logo-subtitle">Your Health, Our Priority</span></div>
+            </div>
+            <div class="nav-links">
+                <div id="nav-dash" class="nav-item active" onclick="switchView('dashboard')">🏠 Dashboard</div>
+                <div id="nav-add" class="nav-item" onclick="switchView('add')">➕ Add Schedule</div>
+                <div id="nav-meds" class="nav-item" onclick="switchView('meds')">🧪 Medicines</div>
+                <div id="nav-reports" class="nav-item" onclick="switchView('reports')">📊 Reports</div>
+                <div id="nav-settings" class="nav-item" onclick="switchView('settings')">👤 Profile</div>
+            </div>
+            <div class="logout-sidebar-btn" onclick="handleLogout()">🚪 Logout Portal</div>
+        </div>
+
+        <div class="main-content">
+            <div class="header-area">
+                <div>
+                    <h1 id="welcomeUserGreeting">Welcome back! 👋</h1>
+                    <p id="viewSubtitle">Here's your health overview for today.</p>
+                </div>
+                <div class="top-user-badge">
+                    <div class="bell-icon-btn" onclick="toggleDropdownMenu('bellDropdownMenuPanel')">
+                        🔔<div class="bell-badge-dot" id="bellCounterDot"></div>
+                    </div>
+                    
+                    <div class="dropdown-menu-box" id="bellDropdownMenuPanel">
+                        <h4>📢 Today's Alerts Log</h4>
+                        <div id="notificationsItemsListNode">
+                            <div class="notif-item" style="color:var(--text-muted); text-align:center;">No fresh logs.</div>
+                        </div>
+                    </div>
+
+                    <div class="profile-pill" onclick="switchView('settings')">
+                        👤 <span id="topBarUserLabel">User Session</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: CORE DASHBOARD -->
+            <div id="view-dashboard" class="view-panel">
+                <div class="metrics-grid" style="margin-bottom: 30px;">
+                    <div class="metric-card">
+                        <div class="metric-icon" style="background-color: #2563eb;">💊</div>
+                        <div class="metric-info"><h3 id="dash-total">0</h3><p>Total Medicines</p></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon" style="background-color: #f59e0b;">⏳</div>
+                        <div class="metric-info"><h3 id="dash-pending">0</h3><p>Today's Reminders</p></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon" style="background-color: #10b981;">✅</div>
+                        <div class="metric-info"><h3 id="dash-taken">0</h3><p>Total Taken</p></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-row-grid">
+                    <div class="panel">
+                        <h2>🔔 Today's Reminders</h2>
+                        <div class="mini-reminder-list" id="dashboardRemindersMiniCardsContainer"></div>
+                    </div>
+                    
+                    <div class="panel">
+                        <h2>📊 Medicine Summary</h2>
+                        <div class="chart-box-wrapper">
+                            <div class="round-donut-chart" id="roundInterfaceRenderCircle">
+                                <div class="round-donut-inner-cutout">
+                                    <h4 id="roundChartCenterValueText">0</h4>
+                                    <p>Total</p>
+                                </div>
+                            </div>
+                            <div class="chart-legend-grid">
+                                <div class="legend-indicator-item"><span style="color:var(--status-taken);">🟢</span> Active/Taken (<span id="legendCountTaken">0</span>)</div>
+                                <div class="legend-indicator-item"><span style="color:var(--status-pending);">🟡</span> Remaining (<span id="legendCountPending">0</span>)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: ADD FORM -->
+            <div id="view-add" class="view-panel hidden">
+                <div class="panel" style="max-width: 600px;">
+                    <h2>➕ Create New Tablet Schedule Configuration</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 25px;">Inject fresh vocal tracker targets directly into your configuration settings.</p>
+                    <form id="reminderForm">
+                        <div class="form-group"><label>Medicine Name</label><input type="text" id="medName" placeholder="e.g., Paracetamol 500mg" required></div>
+                        <div class="form-group"><label>Dosage Instructions</label><input type="text" id="dosage" placeholder="e.g., 1 Tablet - After Breakfast" required></div>
+                        <div class="form-group"><label>Trigger Target Time</label><input type="time" id="remTime" required></div>
+                        <button type="submit" class="primary-btn">Save to Account Database Grid</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- TAB 3: MASTER LOG -->
+            <div id="view-meds" class="view-panel hidden">
+                <div class="panel">
+                    <h2>🧪 Master Medicine Inventory Log (Taken & Not Taken Both)</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Comprehensive logs charting every configuration state profile data.</p>
+                    <table class="medicine-table">
+                        <thead><tr><th>Medicine Name</th><th>Dosage Bracket</th><th>Scheduled Trigger Time</th><th>Adherence Tracking State</th></tr></thead>
+                        <tbody id="medsMasterTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 4: REPORTS -->
+            <div id="view-reports" class="view-panel hidden">
+                <div class="panel">
+                    <h2>📊 Tablet Schedule Diagnostic Reports</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Timeline metric tracks representing historical verification checks.</p>
+                    <table class="medicine-table">
+                        <thead><tr><th>Execution Log Time</th><th>Medicine Product Name</th><th>Dosage Format</th><th>Compliance Tracking Value</th></tr></thead>
+                        <tbody id="reportsTimelineTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB 5: EDITABLE PROFILE -->
+            <div id="view-settings" class="view-panel hidden">
+                <div class="panel" style="max-width: 650px;">
+                    <h2>⚙️ Resident Account Profile Settings</h2>
+                    <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+                        <div class="form-row">
+                            <div><label>Full Name</label><input type="text" id="profName"></div>
+                            <div><label>Unique User ID String</label><input type="text" id="profUid" readonly style="background-color: var(--bg-dark-main); color: var(--text-muted); cursor: not-allowed;"></div>
+                        </div>
+                        <div class="form-row">
+                            <div><label>Age Metric</label><input type="number" id="profAge"></div>
+                            <div><label>Gender Category</label>
+                                <select id="profGender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div><label>Date of Birth (DOB)</label><input type="date" id="profDob"></div>
+                            <div><label>Contact Phone Number</label><input type="tel" id="profContact"></div>
+                        </div>
+                        <div><label>Registered Gmail Account</label><input type="email" id="profGmail"></div>
+                        
+                        <button class="primary-btn" onclick="saveProfileChanges()" style="background-color: var(--status-taken); color: black; margin-top: 10px; font-weight:700;">💾 Save Profile Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-credit">© 2026 MediCare+ | Stay Healthy, Stay Happy! ❤️</div>
+        </div>
+    </div>
+
+    <!-- SNOOZE MODAL LAYER -->
+    <div id="popupModal" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h2>🔔 MEDICATION TIME REMINDER</h2>
+            <hr style="border-color: #243354; margin: 15px 0;">
+            <p id="popupModalText">Loading alert details track...</p>
+            <p style="font-size: 13px; color: var(--text-muted); font-style: italic;">⚠️ This system tracker notification voice will repeat every 1 minute until explicit resolution acknowledgment.</p>
+            <button class="close-modal-btn" id="modalConfirmBtn">I have taken the medicine!!! ✅</button>
+        </div>
+    </div>
+
+    <script>
+        let loggedInUser = JSON.parse(localStorage.getItem('userSession')) || null;
+        let globalRemindersList = [];
+        let takenMedicinesKeys = new Set(JSON.parse(localStorage.getItem('takenMedsCache')) || []);
+        
+        let currentActiveAlarm = null;
+        let snoozeIntervalTimerEngine = null;
+
+        function speak(text) {
+            const speech = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(speech);
+        }
+
+        function toggleAuthViews(showRegister) {
+            document.getElementById('loginCard').classList.toggle('hidden', showRegister);
+            document.getElementById('registerCard').classList.toggle('hidden', !showRegister);
+        }
+
+        function toggleDropdownMenu(elementId) {
+            const element = document.getElementById(elementId);
+            element.style.display = element.style.display === "block" ? "none" : "block";
+        }
+
+        window.addEventListener('click', function(e) {
+            if (!e.target.closest('.top-user-badge')) {
+                document.getElementById('bellDropdownMenuPanel').style.display = "none";
+            }
+        });
+
+        async function handleRegister() {
+            const name = document.getElementById('regName').value;
+            const age = document.getElementById('regAge').value;
+            const gender = document.getElementById('regGender').value;
+            const dob = document.getElementById('regDob').value;
+            const contact = document.getElementById('regContact').value;
+            const gmail = document.getElementById('regGmail').value;
+            const userId = document.getElementById('regUid').value;
+            const password = document.getElementById('regPwd').value;
+
+            if(!name || !userId || !password) return alert("Please fill out required fields!");
+
+            const payload = { name, age, gender, dob, contact, gmail, userId, password };
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if(data.error) return alert(data.error);
+
+            alert("Account initialized successfully!");
+            initSession(payload);
+        }
+
+        async function handleLogin() {
+            const userId = document.getElementById('loginUid').value;
+            const password = document.getElementById('loginPwd').value;
+
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId, password })
+            });
+            const data = await res.json();
+            if(data.error) return alert(data.error);
+
+            initSession(data.profile);
+        }
+
+        function initSession(userObj) {
+            localStorage.setItem('userSession', JSON.stringify(userObj));
+            loggedInUser = userObj;
+            checkViewStatus();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('userSession');
+            loggedInUser = null;
+            checkViewStatus();
+        }
+
+        function checkViewStatus() {
+            if(loggedInUser) {
+                document.getElementById('authWrapper').classList.add('hidden');
+                
+                const appDash = document.getElementById('appDashboard');
+                appDash.classList.remove('hidden');
+                appDash.style.display = 'flex'; 
+                
+                document.getElementById('welcomeUserGreeting').innerText = `Welcome back, ${loggedInUser.name || loggedInUser.userId}! 👋`;
+                document.getElementById('topBarUserLabel').innerText = loggedInUser.name || loggedInUser.userId;
+                
+                document.getElementById('profName').value = loggedInUser.name || '';
+                document.getElementById('profUid').value = loggedInUser.userId || '';
+                document.getElementById('profAge').value = loggedInUser.age || '';
+                document.getElementById('profGender').value = loggedInUser.gender || 'Male';
+                document.getElementById('profDob').value = loggedInUser.dob || '';
+                document.getElementById('profContact').value = loggedInUser.contact || '';
+                document.getElementById('profGmail').value = loggedInUser.gmail || '';
+
+                fetchReminders();
+                switchView('dashboard');
+            } else {
+                document.getElementById('authWrapper').classList.remove('hidden');
+                document.getElementById('appDashboard').classList.add('hidden');
+                document.getElementById('appDashboard').style.display = 'none';
+            }
+        }
+
+        function switchView(viewId) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-add').classList.add('hidden');
+            document.getElementById('view-meds').classList.add('hidden');
+            document.getElementById('view-reports').classList.add('hidden');
+            document.getElementById('view-settings').classList.add('hidden');
+
+            document.getElementById('nav-dash').classList.remove('active');
+            document.getElementById('nav-add').classList.remove('active');
+            document.getElementById('nav-meds').classList.remove('active');
+            document.getElementById('nav-reports').classList.remove('active');
+            document.getElementById('nav-settings').classList.remove('active');
+
+            document.getElementById(`view-${viewId}`).classList.remove('hidden');
+            document.getElementById(`nav-${viewId}`).classList.add('active');
+            
+            if(viewId === 'add') document.getElementById('viewSubtitle').innerText = "Configure and deploy new localized schedules components.";
+            else if(viewId === 'meds') document.getElementById('viewSubtitle').innerText = "Inventory tracking configuration database logs grid attributes.";
+            else if(viewId === 'reports') document.getElementById('viewSubtitle').innerText = "Chronological analysis reports mapping execution states logs tracking.";
+            else if(viewId === 'settings') document.getElementById('viewSubtitle').innerText = "Configure your personal identification tracking details profile entries.";
+            else document.getElementById('viewSubtitle').innerText = "Here's your health overview for today.";
+        }
+
+        function saveProfileChanges() {
+            if (!loggedInUser) return;
+
+            loggedInUser.name = document.getElementById('profName').value;
+            loggedInUser.age = document.getElementById('profAge').value;
+            loggedInUser.gender = document.getElementById('profGender').value;
+            loggedInUser.dob = document.getElementById('profDob').value;
+            loggedInUser.contact = document.getElementById('profContact').value;
+            loggedInUser.gmail = document.getElementById('profGmail').value;
+
+            localStorage.setItem('userSession', JSON.stringify(loggedInUser));
+            document.getElementById('welcomeUserGreeting').innerText = `Welcome back, ${loggedInUser.name}! 👋`;
+            document.getElementById('topBarUserLabel').innerText = loggedInUser.name;
+            
+            alert("Profile configurations updated successfully! 👥");
+        }
+
+        async function fetchReminders() {
+            if(!loggedInUser) return;
+            const res = await fetch(`/api/reminders?userId=${loggedInUser.userId}`);
+            globalRemindersList = await res.json();
+            renderPremiumDashboardStructures();
+        }
+
+        function renderPremiumDashboardStructures() {
+            const miniCardsContainer = document.getElementById('dashboardRemindersMiniCardsContainer');
+            const medsMasterBody = document.getElementById('medsMasterTableBody');
+            const reportsTimelineBody = document.getElementById('reportsTimelineTableBody');
+            const notificationsContainer = document.getElementById('notificationsItemsListNode');
+
+            miniCardsContainer.innerHTML = ''; medsMasterBody.innerHTML = ''; 
+            reportsTimelineBody.innerHTML = ''; notificationsContainer.innerHTML = '';
+
+            let takenCount = 0;
+            let pendingCount = 0;
+            document.getElementById('dash-total').innerText = globalRemindersList.length;
+
+            if(globalRemindersList.length === 0) {
+                const emptyFeedback = '<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:14px; width:100%;">No active schedules configured.</div>';
+                miniCardsContainer.innerHTML = emptyFeedback;
+                const emptyRow = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Empty database state log.</td></tr>';
+                medsMasterBody.innerHTML = emptyRow; reportsTimelineBody.innerHTML = emptyRow;
+                notificationsContainer.innerHTML = '<div class="notif-item" style="color:var(--text-muted); text-align:center;">No fresh alerts.</div>';
+                
+                updateRoundChartInterface(0, 0, 0);
+                return;
+            }
+
+            globalRemindersList.forEach((item) => {
+                const itemHashKey = `${item.reminderTime}-${item.medicineName}`;
+                const checkStateTrue = takenMedicinesKeys.has(itemHashKey);
+
+                if(checkStateTrue) takenCount++; else pendingCount++;
+
+                const card = document.createElement('div');
+                card.className = "mini-reminder-item";
+                const pillBadge = checkStateTrue ? '<span class="status-pill taken">✓ Taken</span>' : '<span class="status-pill pending">⏳ Pending</span>';
+                
+                card.innerHTML = `
+                    <div class="time-box">⏰ ${item.reminderTime}</div>
+                    <div class="med-details">
+                        <h4>${item.medicineName}</h4>
+                        <p>${item.dosage}</p>
+                    </div>
+                    <div>${pillBadge}</div>
+                `;
+                miniCardsContainer.appendChild(card);
+
+                const notif = document.createElement('div');
+                notif.className = "notif-item";
+                notif.innerHTML = checkStateTrue 
+                    ? `🟢 <strong>${item.medicineName}</strong> marked as taken at ${item.reminderTime}.` 
+                    : `⚠️ <strong>${item.medicineName}</strong> scheduled upcoming alarm set for ${item.reminderTime}.`;
+                notificationsContainer.appendChild(notif);
+
+                const rowMaster = document.createElement('tr');
+                const adherenceStatusBadge = checkStateTrue ? '<span class="status-pill taken">✓ Taken</span>' : '<span class="status-pill pending">⏳ Not Taken</span>';
+                rowMaster.innerHTML = `<td><strong>${item.medicineName}</strong></td><td>${item.dosage}</td><td>${item.reminderTime}</td><td>${adherenceStatusBadge}</td>`;
+                medsMasterBody.appendChild(rowMaster);
+
+                const rowReport = document.createElement('tr');
+                const complianceStatusLabel = checkStateTrue ? '<span style="color:var(--status-taken); font-weight:600;">Successfully Checked Off</span>' : '<span style="color:var(--status-pending); font-weight:600;">Awaiting Target Intake Time</span>';
+                rowReport.innerHTML = `<td style="color:var(--accent-blue); font-weight:700;">⏱️ ${item.reminderTime}</td><td><strong>${item.medicineName}</strong></td><td>${item.dosage}</td><td>${complianceStatusLabel}</td>`;
+                reportsTimelineBody.appendChild(rowReport);
+            });
+
+            document.getElementById('dash-taken').innerText = takenCount;
+            document.getElementById('dash-pending').innerText = pendingCount;
+
+            updateRoundChartInterface(globalRemindersList.length, takenCount, pendingCount);
+        }
+
+        function updateRoundChartInterface(total, taken, pending) {
+            document.getElementById('roundChartCenterValueText').innerText = total;
+            document.getElementById('legendCountTaken').innerText = taken;
+            document.getElementById('legendCountPending').innerText = pending;
+
+            const takenPercentage = total > 0 ? (taken / total) * 100 : 0;
+            const chartCircleElement = document.getElementById('roundInterfaceRenderCircle');
+            
+            chartCircleElement.style.background = `conic-gradient(var(--status-taken) 0% ${takenPercentage}%, var(--status-pending) ${takenPercentage}% 100%)`;
+            
+            const dot = document.getElementById('bellCounterDot');
+            if (pending > 0) dot.style.display = "block"; else dot.style.display = "none";
+        }
+
+        function triggerPersistentAlarm(med) {
+            currentActiveAlarm = med;
+            const voiceSpeechString = `Medication alert notification. It is time to execute intake of: ${med.medicineName}. Target configuration dosage pattern directive: ${med.dosage}.`;
+            
+            document.getElementById('popupModalText').innerText = voiceSpeechString;
+            document.getElementById('popupModal').classList.remove('hidden');
+            
+            speak(voiceSpeechString);
+
+            if(snoozeIntervalTimerEngine) clearInterval(snoozeIntervalTimerEngine);
+            snoozeIntervalTimerEngine = setInterval(() => {
+                speak(voiceSpeechString);
+            }, 60000);
+
+            document.getElementById('modalConfirmBtn').onclick = () => {
+                clearInterval(snoozeIntervalTimerEngine);
+                document.getElementById('popupModal').classList.add('hidden');
+                
+                const combinedKeyHash = `${med.reminderTime}-${med.medicineName}`;
+                takenMedicinesKeys.add(combinedKeyHash);
+                localStorage.setItem('takenMedsCache', JSON.stringify([...takenMedicinesKeys]));
+                
+                currentActiveAlarm = null;
+                renderPremiumDashboardStructures();
+            };
+        }
+
+        function checkClockReminders() {
+            if(!loggedInUser || currentActiveAlarm) return;
+            
+            const now = new Date();
+            const systemTimeNow = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            globalRemindersList.forEach(med => {
+                if (med.reminderTime === systemTimeNow && med.lastTriggered !== systemTimeNow) {
+                    med.lastTriggered = systemTimeNow;
+                    triggerPersistentAlarm(med);
+                }
+            });
+        }
+
+        document.getElementById('reminderForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const medicineName = document.getElementById('medName').value;
+            const dosage = document.getElementById('dosage').value;
+            const reminderTime = document.getElementById('remTime').value;
+
+            await fetch('/api/reminders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: loggedInUser.userId, medicineName, dosage, reminderTime })
+            });
+            document.getElementById('reminderForm').reset();
+            alert("Medication schedule tracked and saved successfully!");
+            fetchReminders();
+            switchView('dashboard');
+        });
+
+        checkViewStatus();
+        setInterval(checkClockReminders, 4000);
+
+        // SERVICE WORKER INITIALIZATION CODE FOR PWA COMPLIANCE
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('🚀 Service Worker registered perfectly!', reg))
+                    .catch(err => console.error('❌ Service Worker registry failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>
