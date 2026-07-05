@@ -178,6 +178,31 @@
         .close-modal-btn { background-color: var(--status-taken); color: #000000; border: none; padding: 14px 35px; border-radius: 10px; font-weight: 700; font-size: 16px; cursor: pointer; width: 100%; margin-top: 10px; }
 
         .footer-credit { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: auto; padding-top: 30px; }
+
+        /* 📱 Mobile Responsiveness for Android & iOS */
+@media (max-width: 768px) {
+    /* 1. Stack or collapse the main layout wrapper */
+    body, .main-content-wrapper, div[style*='display: flex'] { 
+        flex-direction: column !important;
+    }
+
+    /* 2. Make the sidebar span full width or turn it into a top bar */
+    #sidebar, .sidebar, div.panel:first-child {
+        width: 100% !important;
+        min-width: 100% !important;
+        height: auto !important;
+        position: relative !important;
+    }
+
+    /* 3. Give the dashboard views full room to display neatly */
+    .view-panel, #appDashboard, .panel {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 15px !important;
+    }
+}
+    
     </style>
 </head>
 <body>
