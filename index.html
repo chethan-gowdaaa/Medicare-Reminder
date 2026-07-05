@@ -194,16 +194,7 @@
 
         <div id="registerCard" class="auth-container hidden">
             <h2>📝 Profile Registration</h2>
-            <div class="form-group"><label>Full Name</label><input type="text" id="regName" placeholder="e.g., Chethu Gowda" required></div>
-            <div class="form-row">
-                <div class="form-group"><label>Age</label><input type="number" id="regAge" placeholder="24" required></div>
-                <div class="form-group"><label>Gender</label>
-                    <select id="regGender"><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select>
-                </div>
-            </div>
-            <div class="form-group"><label>Date of Birth</label><input type="date" id="regDob" required></div>
-            <div class="form-group"><label>Contact No</label><input type="tel" id="regContact" placeholder="+91 XXXXX XXXXX" required></div>
-            <div class="form-group"><label>Gmail Address</label><input type="email" id="regGmail" placeholder="name@gmail.com" required></div>
+            
             <div class="form-row">
                 <div class="form-group"><label>User ID</label><input type="text" id="regUid" placeholder="Pick username" required></div>
                 <div class="form-group"><label>Password</label><input type="password" id="regPwd" placeholder="Password" required></div>
@@ -426,18 +417,12 @@
         }
 
         async function handleRegister() {
-            const name = document.getElementById('regName').value;
-            const age = document.getElementById('regAge').value;
-            const gender = document.getElementById('regGender').value;
-            const dob = document.getElementById('regDob').value;
-            const contact = document.getElementById('regContact').value;
-            const gmail = document.getElementById('regGmail').value;
+        
             const userId = document.getElementById('regUid').value;
             const password = document.getElementById('regPwd').value;
 
-            if(!name || !userId || !password) return alert("Please fill out required fields!");
-
-            const payload = { name, age, gender, dob, contact, gmail, userId, password };
+            if (!userId || !password) return alert("Please fill out all fields");
+            const payload = { userId, password };
             try {
                 const res = await fetch('/api/auth/register', {
                     method: 'POST',
