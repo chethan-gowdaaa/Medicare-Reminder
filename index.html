@@ -179,57 +179,112 @@
 
         .footer-credit { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: auto; padding-top: 30px; }
 
-        /* 📱 Complete Responsive View for Android & iOS */
-@media (max-width: 768px) {
-    /* Force everything into a single vertical column flow */
-    html, body, #appDashboard, .main-content-wrapper, .main-content {
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow-x: hidden !important;
-        display: block !important;
-    }
+        /* 📱 CLEAN RESPONSIVE VIEWPORTS FOR MOBILE DEVICES */
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column !important;
+                overflow-x: hidden !important;
+            }
 
-    /* Collapse the sidebar into a flat top-bar container */
-    #sidebar, .sidebar, div[style*="width: 250px"], div[style*="width:250px"] {
-        width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-        position: relative !important;
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        justify-content: space-around !important;
-        padding: 10px !important;
-        box-sizing: border-box !important;
-    }
+            #appDashboard {
+                flex-direction: column !important;
+            }
 
-    /* Make navigation buttons small and inline side-by-side */
-    #sidebar a, .sidebar button, .nav-item, #sidebar div {
-        display: inline-block !important;
-        width: auto !important;
-        margin: 5px !important;
-        padding: 8px 12px !important;
-        font-size: 14px !important;
-    }
+            /* Convert fixed sidebar layout into scrollable row navigation at the top */
+            .sidebar {
+                width: 100% !important;
+                height: auto !important;
+                padding: 15px !important;
+                border-right: none !important;
+                border-bottom: 1px solid #1e293b !important;
+            }
 
-    /* Hide the huge brand header logo text to save vertical space on mobile screens */
-    .sidebar h2, #sidebar .logo, .logo-text {
-        display: none !important;
-    }
+            .logo-area {
+                margin-bottom: 15px !important;
+                justify-content: center !important;
+            }
 
-    /* Expand the view panels to use the full horizontal screen space */
-    .view-panel, .panel, #view-dash, #view-add, #view-meds, #view-reports, #view-profile {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 100% !important;
-        margin: 0 !important;
-        padding: 15px !important;
-        box-sizing: border-box !important;
-        display: block !important;
-    }
-}
-    
+            .nav-links {
+                flex-direction: row !important;
+                overflow-x: auto !important;
+                padding-bottom: 5px !important;
+                gap: 6px !important;
+                scrollbar-width: none !important;
+            }
+            .nav-links::-webkit-scrollbar {
+                display: none !important;
+            }
+
+            .nav-item {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+                white-space: nowrap !important;
+                flex-shrink: 0 !important;
+            }
+
+            .logout-sidebar-btn {
+                margin-top: 10px !important;
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+                justify-content: center !important;
+            }
+
+            /* Adjust main application paddings and margins */
+            .main-content {
+                padding: 16px !important;
+                gap: 20px !important;
+            }
+
+            .header-area {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 15px !important;
+            }
+
+            .top-user-badge {
+                width: 100% !important;
+                justify-content: space-between !important;
+            }
+
+            /* Change the layout grid metrics into rows */
+            .metrics-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+
+            .metric-card {
+                padding: 16px !important;
+            }
+
+            .panel {
+                padding: 16px !important;
+            }
+
+            /* Enforce horizontal scrolling mechanics on structural tables */
+            .medicine-table {
+                display: block !important;
+                overflow-x: auto !important;
+                white-space: nowrap !important;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr !important;
+                gap: 0 !important;
+            }
+
+            .auth-container {
+                width: 90% !important;
+                padding: 24px !important;
+            }
+
+            .modal-box {
+                width: 90% !important;
+                padding: 24px !important;
+            }
+            .modal-box p {
+                font-size: 15px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -666,7 +721,7 @@
 
         function triggerPersistentAlarm(med) {
             currentActiveAlarm = med;
-            const voiceSpeechString = `Medication alert notification. It is time to execute intake of: ${med.medicineName}. Target configuration dosage pattern directive: ${med.dosage}.`;
+            const voiceSpeechString = `Medication alert : It is time to intake your "${med.medicineName}". Dosage Pattern Directive : ${med.dosage}`;
             
             document.getElementById('popupModalText').innerText = voiceSpeechString;
             document.getElementById('popupModal').classList.remove('hidden');
