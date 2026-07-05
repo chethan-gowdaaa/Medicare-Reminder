@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const path = require('path');
 const dns = require('dns');
+require('dotenv').config();
 
 // 🛠️ Force Node to use Google DNS to bypass router blocks!
 dns.setServers(['8.8.8.8', '8.8.4.4']);
@@ -11,7 +12,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 💾 YOUR CLEAN CLOUD DATABASE LINK
-const MONGO_URI = "mongodb+srv://chethangowdaaa3006_db_user:CHEVIKA3006@cluster0.lxph160.mongodb.net/medicare?appName=Cluster0";
+const dbURI = process.env.MONGODB_URI;
+mongoose.connect(dbURI);
 
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
