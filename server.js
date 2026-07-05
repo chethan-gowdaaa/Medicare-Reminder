@@ -11,11 +11,20 @@ dns.setServers(['8.8.8.8', '8.8.4.4']);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Middleware configuration strings for reading payloads
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Serve all static layout frontend assets directly from the root folder
+app.use(express.static(path.join(__dirname)));
+
+// 🔒 SECURED CLOUD DATABASE LINK INTERFACE
 const dbURI = process.env.MONGODB_URI;
 
 mongoose.connect(dbURI)
   .then(() => console.log("🚀 Successfully connected to MongoDB Atlas Cloud!"))
   .catch(err => console.error("❌ MongoDB connection error: ", err));
+
 // Define User Database Schema
 const UserSchema = new mongoose.Schema({
     name: String,
@@ -38,6 +47,11 @@ const ReminderSchema = new mongoose.Schema({
     lastTriggered: { type: String, default: "" }
 });
 const Reminder = mongoose.model('Reminder', ReminderSchema);
+
+// 🌐 MAIN HOME ROUTE INTERFACE (Fixes the "Cannot GET /" bug!)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // ROUTE HANDLERS FOR PWA DEPLOYMENT MAPPING ASSIGNMENTS
 app.get('/sw.js', (req, res) => {
