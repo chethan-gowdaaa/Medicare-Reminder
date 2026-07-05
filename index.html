@@ -547,7 +547,7 @@
         async function fetchReminders() {
             if(!loggedInUser) return;
             try {
-                const res = await fetch(`/api/reminders?userId=${loggedInUser.userId}`);
+                const res = await fetch(`https://medicare-reminder-nxkd.onrender.com/api/reminders?userId=${loggedInUser.userId}`);
                 if (res.ok) {
                     globalRemindersList = await res.json();
                     // 🔥 CRITICAL: BACKUP TO MACHINE INTERNALS FOR OFFLINE ACCESS
@@ -571,7 +571,7 @@
             renderPremiumDashboardStructures();
 
             try {
-                await fetch(`/api/reminders/${reminderId}`, { method: 'DELETE' });
+                await fetch(`https://medicare-reminder-nxkd.onrender.com/api/reminders/${reminderId}`, { method: 'DELETE' });
             } catch (err) {
                 console.log("⚠️ Deleted from device memory state loop. Changes will sink on backend next connection.");
             }
@@ -684,7 +684,7 @@
             switchView('dash');
 
             try {
-                await fetch('/api/reminders', {
+                await fetch('https://medicare-reminder-nxkd.onrender.com/api/reminders', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
