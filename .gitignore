@@ -1,0 +1,18 @@
+# Dependency folders (You already have this!)
+node_modules/
+
+# Local database/runtime modifications (Optional)
+# Un-comment the line below if you want your database changes to stay private on your machine
+# db.json
+
+# Environment variables & secrets
+.env
+.env.local
+
+# Operating System specific files
+.DS_Store
+Thumbs.db
+
+# VS Code specific settings workspace
+.vscode/
+*.code-workspace

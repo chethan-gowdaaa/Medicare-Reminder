@@ -4,14 +4,13 @@ const mongoose = require('mongoose');
 const path = require('path');
 const dns = require('dns');
 
-// 🛠️ THE MAGIC TRICK: Force Node to use Google DNS to bypass your router's block!
+// 🛠️ Force Node to use Google DNS to bypass router blocks!
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 💾 YOUR CLEAN CLOUD DATABASE LINK
-// ⚠️ CRITICAL: Replace <db_password> with your actual database password!
 const MONGO_URI = "mongodb+srv://chethangowdaaa3006_db_user:CHEVIKA3006@cluster0.lxph160.mongodb.net/medicare?appName=Cluster0";
 
 app.use(bodyParser.json());
@@ -113,6 +112,23 @@ app.post('/api/reminders', async (req, res) => {
         res.status(201).json(newReminder);
     } catch (err) {
         res.status(500).json({ error: "Error saving reminder" });
+    }
+});
+
+// 🔥 DELETE UNWANTED MEDICINE REMINDER FROM MONGO CLOUD
+app.delete('/api/reminders/:id', async (req, res) => {
+    try {
+        const reminderId = req.params.id;
+        const deletedItem = await Reminder.findByIdAndDelete(reminderId);
+        
+        if (!deletedItem) {
+            return res.status(404).json({ error: "Medicine item layout not found!" });
+        }
+        
+        res.status(200).json({ message: "Reminder deleted successfully from database grid!" });
+    } catch (err) {
+        console.error("Error breaking entry:", err);
+        res.status(500).json({ error: "Error deleting tracking database configuration" });
     }
 });
 

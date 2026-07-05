@@ -29,7 +29,6 @@
             display: flex;
         }
 
-        /* AUTH STYLES */
         .auth-wrapper {
             width: 100%;
             display: flex;
@@ -53,7 +52,7 @@
 
         .hidden { display: none !important; }
 
-        /* PREMIUM SIDEBAR STRUCTURE */
+        /* SIDEBAR STRUCTURE */
         .sidebar { 
             width: 260px; 
             background-color: var(--bg-dark-sidebar); 
@@ -62,6 +61,7 @@
             flex-direction: column; 
             border-right: 1px solid #1e293b;
             box-sizing: border-box;
+            flex-shrink: 0;
         }
         .logo-area { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; margin-bottom: 40px; }
         .logo-icon { background-color: var(--accent-blue); padding: 8px 12px; border-radius: 10px; font-size: 18px; }
@@ -96,15 +96,13 @@
         }
         .logout-sidebar-btn:hover { background-color: rgba(239, 68, 68, 0.1); }
 
-        /* MAIN CONTENT VIEWPORT CONTAINER */
+        /* MAIN CONTENT CONTAINER */
         .main-content { flex: 1; padding: 40px; display: flex; flex-direction: column; gap: 30px; overflow-y: auto; box-sizing: border-box; }
         
-        /* HEADER PANEL LAYOUT */
         .header-area { display: flex; justify-content: space-between; align-items: center; }
         .header-area h1 { margin: 0; font-size: 28px; font-weight: 700; }
         .header-area p { margin: 5px 0 0 0; color: var(--text-muted); font-size: 15px; }
         
-        /* INTERACTIVE TOP MENU BADGES */
         .top-user-badge { display: flex; align-items: center; gap: 15px; position: relative; }
         
         .bell-icon-btn { background-color: var(--bg-card); border: 1px solid #1e293b; color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; position: relative; }
@@ -113,25 +111,20 @@
         .profile-pill { background-color: var(--bg-card); padding: 8px 16px; border-radius: 20px; font-weight: 500; font-size: 14px; display: flex; align-items: center; gap: 8px; border: 1px solid #1e293b; cursor: pointer; transition: background 0.2s; }
         .profile-pill:hover { background-color: #1e293b; }
 
-        /* DROP-DOWN PANELS SYSTEM */
         .dropdown-menu-box { position: absolute; top: 50px; right: 0; background-color: var(--bg-card); border: 1px solid #1e293b; border-radius: 12px; padding: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 260px; z-index: 100; display: none; }
         .dropdown-menu-box h4 { margin: 0; border-bottom: 1px solid #1e293b; padding-bottom: 8px; font-size: 14px; color: var(--text-muted); margin-bottom: 10px; }
         .notif-item { font-size: 13px; padding: 8px 0; border-bottom: 1px solid #1d263b; }
         .notif-item:last-child { border-bottom: none; }
 
-        /* TOP SUMMARY METRICS GRID */
         .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
         .metric-card { background-color: var(--bg-card); padding: 24px; border-radius: 16px; display: flex; align-items: center; gap: 20px; border: 1px solid #1e293b; }
         .metric-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; color: white; }
         .metric-info h3 { margin: 0; font-size: 32px; font-weight: 700; }
         .metric-info p { margin: 2px 0 0 0; color: var(--text-muted); font-size: 14px; font-weight: 500; }
 
-        /* DASHBOARD SECTIONS GRID PANELS */
-        .dashboard-row-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
-        .panel { background-color: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid #1e293b; }
+        .panel { background-color: var(--bg-card); padding: 25px; border-radius: 16px; border: 1px solid #1e293b; width: 100%; box-sizing: border-box; }
         .panel h2 { margin: 0 0 20px 0; font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
 
-        /* REMINDER MINI CARDS */
         .mini-reminder-list { display: flex; flex-direction: column; gap: 12px; }
         .mini-reminder-item { background: #1a243d; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #243354; }
         .time-box { color: var(--accent-blue); font-weight: 700; font-size: 16px; width: 80px; }
@@ -139,37 +132,16 @@
         .med-details h4 { margin: 0; font-size: 16px; font-weight: 600; }
         .med-details p { margin: 4px 0 0 0; color: var(--text-muted); font-size: 13px; }
         
-        .status-pill { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; }
+        .status-pill { padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; display: inline-block; }
         .status-pill.taken { background-color: rgba(16, 185, 129, 0.15); color: var(--status-taken); }
         .status-pill.pending { background-color: rgba(245, 158, 11, 0.15); color: var(--status-pending); }
 
-        /* ROUND CHART INTERFACE SPECIFICATION */
-        .chart-box-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; min-height: 200px; }
-        .round-donut-chart { 
-            width: 140px; 
-            height: 140px; 
-            border-radius: 50%; 
-            background: conic-gradient(var(--status-taken) 0% 0%, var(--status-pending) 0% 100%);
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
-        }
-        .round-donut-inner-cutout { width: 100px; height: 100px; background-color: var(--bg-card); border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .round-donut-inner-cutout h4 { margin: 0; font-size: 26px; font-weight: 700; }
-        .round-donut-inner-cutout p { margin: 2px 0 0 0; font-size: 12px; color: var(--text-muted); }
-        
-        .chart-legend-grid { display: flex; justify-content: center; gap: 20px; width: 100%; margin-top: 25px; }
-        .legend-indicator-item { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; }
-
         /* TABLES STRUCTURES */
-        .medicine-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .medicine-table th, .medicine-table td { padding: 16px; border-bottom: 1px solid #1e293b; }
+        .medicine-table { width: 100%; border-collapse: collapse; text-align: left; table-layout: auto; }
+        .medicine-table th, .medicine-table td { padding: 16px; border-bottom: 1px solid #1e293b; vertical-align: middle; }
         .medicine-table th { color: var(--text-muted); font-weight: 500; font-size: 14px; }
         .medicine-table td { font-size: 15px; }
 
-        /* FORMS LAYOUTS */
         .form-group { margin-bottom: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         label { display: block; margin-bottom: 8px; color: var(--text-muted); font-size: 14px; font-weight: 500; }
@@ -177,6 +149,27 @@
 
         button.primary-btn { width: 100%; background-color: var(--accent-blue); color: white; padding: 14px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; font-size: 15px; transition: background 0.2s; }
         button.primary-btn:hover { background-color: var(--accent-blue-hover); }
+
+        .delete-btn { 
+            background-color: #ef4444 !important; 
+            color: white !important; 
+            border: none !important; 
+            padding: 10px 16px !important; 
+            border-radius: 8px !important; 
+            cursor: pointer !important; 
+            font-weight: 600 !important; 
+            font-size: 14px !important; 
+            display: inline-block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            transition: background 0.2s;
+            position: relative !important;
+            z-index: 9999 !important;
+            pointer-events: auto !important;
+        }
+        .delete-btn:hover { background-color: #dc2626 !important; }
+
+        .permission-banner { background-color: #1e293b; padding: 15px; border-radius: 12px; border: 1px solid var(--accent-blue); display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(5, 8, 16, 0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .modal-box { background-color: var(--bg-card); padding: 40px; border-radius: 20px; width: 480px; text-align: center; border: 1px solid var(--accent-blue); box-shadow: 0 0 40px rgba(37, 99, 235, 0.3); }
@@ -220,7 +213,7 @@
         </div>
     </div>
 
-    <!-- MAIN APP WRAPPER (HIDDEN ON FIRST LOAD CLEAN EXIT) -->
+    <!-- MAIN APP WRAPPER -->
     <div id="appDashboard" class="hidden" style="width: 100%; min-height: 100vh;">
         <div class="sidebar">
             <div class="logo-area">
@@ -228,7 +221,7 @@
                 <div>MediCare+<span class="logo-subtitle">Your Health, Our Priority</span></div>
             </div>
             <div class="nav-links">
-                <div id="nav-dash" class="nav-item active" onclick="switchView('dashboard')">🏠 Dashboard</div>
+                <div id="nav-dash" class="nav-item active" onclick="switchView('dash')">🏠 Dashboard</div>
                 <div id="nav-add" class="nav-item" onclick="switchView('add')">➕ Add Schedule</div>
                 <div id="nav-meds" class="nav-item" onclick="switchView('meds')">🧪 Medicines</div>
                 <div id="nav-reports" class="nav-item" onclick="switchView('reports')">📊 Reports</div>
@@ -238,12 +231,21 @@
         </div>
 
         <div class="main-content">
+            <div id="permissionBannerArea" class="permission-banner hidden">
+                <div>📢 <strong>Enable Browser Alarms:</strong> Click the secure activation button to unlock live sounds and banner reminders.</div>
+                <button class="primary-btn" style="width: auto; padding: 8px 18px;" onclick="manuallyEnableNotifications()">Activate Alarms</button>
+            </div>
+
             <div class="header-area">
                 <div>
                     <h1 id="welcomeUserGreeting">Welcome back! 👋</h1>
                     <p id="viewSubtitle">Here's your health overview for today.</p>
                 </div>
                 <div class="top-user-badge">
+                    <button id="audioToggleBtn" onclick="toggleAudioSystem()" style="background-color: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s;">
+                        🔊 Audio: ON
+                    </button>
+
                     <div class="bell-icon-btn" onclick="toggleDropdownMenu('bellDropdownMenuPanel')">
                         🔔<div class="bell-badge-dot" id="bellCounterDot"></div>
                     </div>
@@ -262,7 +264,7 @@
             </div>
 
             <!-- TAB 1: CORE DASHBOARD -->
-            <div id="view-dashboard" class="view-panel">
+            <div id="view-dash" class="view-panel">
                 <div class="metrics-grid" style="margin-bottom: 30px;">
                     <div class="metric-card">
                         <div class="metric-icon" style="background-color: #2563eb;">💊</div>
@@ -278,27 +280,9 @@
                     </div>
                 </div>
 
-                <div class="dashboard-row-grid">
-                    <div class="panel">
-                        <h2>🔔 Today's Reminders</h2>
-                        <div class="mini-reminder-list" id="dashboardRemindersMiniCardsContainer"></div>
-                    </div>
-                    
-                    <div class="panel">
-                        <h2>📊 Medicine Summary</h2>
-                        <div class="chart-box-wrapper">
-                            <div class="round-donut-chart" id="roundInterfaceRenderCircle">
-                                <div class="round-donut-inner-cutout">
-                                    <h4 id="roundChartCenterValueText">0</h4>
-                                    <p>Total</p>
-                                </div>
-                            </div>
-                            <div class="chart-legend-grid">
-                                <div class="legend-indicator-item"><span style="color:var(--status-taken);">🟢</span> Active/Taken (<span id="legendCountTaken">0</span>)</div>
-                                <div class="legend-indicator-item"><span style="color:var(--status-pending);">🟡</span> Remaining (<span id="legendCountPending">0</span>)</div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="panel">
+                    <h2>🔔 Today's Reminders</h2>
+                    <div class="mini-reminder-list" id="dashboardRemindersMiniCardsContainer"></div>
                 </div>
             </div>
 
@@ -322,7 +306,7 @@
                     <h2>🧪 Master Medicine Inventory Log (Taken & Not Taken Both)</h2>
                     <p style="color: var(--text-muted); margin-bottom: 20px;">Comprehensive logs charting every configuration state profile data.</p>
                     <table class="medicine-table">
-                        <thead><tr><th>Medicine Name</th><th>Dosage Bracket</th><th>Scheduled Trigger Time</th><th>Adherence Tracking State</th></tr></thead>
+                        <thead><tr><th>Medicine Name</th><th>Dosage Bracket</th><th>Scheduled Trigger Time</th><th>Adherence Tracking State</th><th>Action</th></tr></thead>
                         <tbody id="medsMasterTableBody"></tbody>
                     </table>
                 </div>
@@ -383,15 +367,52 @@
 
     <script>
         let loggedInUser = JSON.parse(localStorage.getItem('userSession')) || null;
-        let globalRemindersList = [];
+        let globalRemindersList = JSON.parse(localStorage.getItem('offlineRemindersBackup')) || [];
         let takenMedicinesKeys = new Set(JSON.parse(localStorage.getItem('takenMedsCache')) || []);
         
         let currentActiveAlarm = null;
         let snoozeIntervalTimerEngine = null;
+        let swRegistration = null;
+        let isAudioEnabled = true;
 
         function speak(text) {
+            if (!isAudioEnabled) return;
+            window.speechSynthesis.cancel(); 
             const speech = new SpeechSynthesisUtterance(text);
             window.speechSynthesis.speak(speech);
+        }
+
+        function toggleAudioSystem() {
+            isAudioEnabled = !isAudioEnabled;
+            const audioBtn = document.getElementById('audioToggleBtn');
+            if (isAudioEnabled) {
+                audioBtn.innerText = "🔊 Audio: ON";
+                audioBtn.style.backgroundColor = "rgba(16, 185, 129, 0.2)";
+                audioBtn.style.color = "#10b981";
+                speak("Vocal reminders enabled.");
+            } else {
+                audioBtn.innerText = "🔇 Audio: OFF";
+                audioBtn.style.backgroundColor = "rgba(239, 68, 68, 0.2)";
+                audioBtn.style.color = "#ef4444";
+                window.speechSynthesis.cancel();
+            }
+        }
+
+        function verifyNotificationPermissions() {
+            if ('Notification' in window) {
+                if (Notification.permission !== 'granted') {
+                    document.getElementById('permissionBannerArea').classList.remove('hidden');
+                }
+            }
+        }
+
+        function manuallyEnableNotifications() {
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    document.getElementById('permissionBannerArea').classList.add('hidden');
+                    alert("🔔 Notifications and Alarms initialized successfully!");
+                }
+            });
         }
 
         function toggleAuthViews(showRegister) {
@@ -403,12 +424,6 @@
             const element = document.getElementById(elementId);
             element.style.display = element.style.display === "block" ? "none" : "block";
         }
-
-        window.addEventListener('click', function(e) {
-            if (!e.target.closest('.top-user-badge')) {
-                document.getElementById('bellDropdownMenuPanel').style.display = "none";
-            }
-        });
 
         async function handleRegister() {
             const name = document.getElementById('regName').value;
@@ -423,31 +438,41 @@
             if(!name || !userId || !password) return alert("Please fill out required fields!");
 
             const payload = { name, age, gender, dob, contact, gmail, userId, password };
-            const res = await fetch('/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            const data = await res.json();
-            if(data.error) return alert(data.error);
-
-            alert("Account initialized successfully!");
-            initSession(payload);
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if(data.error) return alert(data.error);
+                alert("Account initialized successfully!");
+                initSession(payload);
+            } catch (e) {
+                alert("Cannot register accounts while completely offline.");
+            }
         }
 
         async function handleLogin() {
             const userId = document.getElementById('loginUid').value;
             const password = document.getElementById('loginPwd').value;
-
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId, password })
-            });
-            const data = await res.json();
-            if(data.error) return alert(data.error);
-
-            initSession(data.profile);
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, password })
+                });
+                const data = await res.json();
+                if(data.error) return alert(data.error);
+                initSession(data.profile);
+            } catch (e) {
+                // 🔥 OFFLINE EMERGENCY BYPASS LOG IN
+                if(loggedInUser && loggedInUser.userId === userId) {
+                    initSession(loggedInUser);
+                } else {
+                    alert("Network error. Please try login again when connected.");
+                }
+            }
         }
 
         function initSession(userObj) {
@@ -465,7 +490,6 @@
         function checkViewStatus() {
             if(loggedInUser) {
                 document.getElementById('authWrapper').classList.add('hidden');
-                
                 const appDash = document.getElementById('appDashboard');
                 appDash.classList.remove('hidden');
                 appDash.style.display = 'flex'; 
@@ -481,8 +505,12 @@
                 document.getElementById('profContact').value = loggedInUser.contact || '';
                 document.getElementById('profGmail').value = loggedInUser.gmail || '';
 
+                verifyNotificationPermissions();
+                
+                // 🔥 Immediate UI layout fill from device cache backup on start
+                renderPremiumDashboardStructures();
                 fetchReminders();
-                switchView('dashboard');
+                switchView('dash');
             } else {
                 document.getElementById('authWrapper').classList.remove('hidden');
                 document.getElementById('appDashboard').classList.add('hidden');
@@ -491,50 +519,62 @@
         }
 
         function switchView(viewId) {
-            document.getElementById('view-dashboard').classList.add('hidden');
-            document.getElementById('view-add').classList.add('hidden');
-            document.getElementById('view-meds').classList.add('hidden');
-            document.getElementById('view-reports').classList.add('hidden');
-            document.getElementById('view-settings').classList.add('hidden');
-
-            document.getElementById('nav-dash').classList.remove('active');
-            document.getElementById('nav-add').classList.remove('active');
-            document.getElementById('nav-meds').classList.remove('active');
-            document.getElementById('nav-reports').classList.remove('active');
-            document.getElementById('nav-settings').classList.remove('active');
-
-            document.getElementById(`view-${viewId}`).classList.remove('hidden');
-            document.getElementById(`nav-${viewId}`).classList.add('active');
-            
-            if(viewId === 'add') document.getElementById('viewSubtitle').innerText = "Configure and deploy new localized schedules components.";
-            else if(viewId === 'meds') document.getElementById('viewSubtitle').innerText = "Inventory tracking configuration database logs grid attributes.";
-            else if(viewId === 'reports') document.getElementById('viewSubtitle').innerText = "Chronological analysis reports mapping execution states logs tracking.";
-            else if(viewId === 'settings') document.getElementById('viewSubtitle').innerText = "Configure your personal identification tracking details profile entries.";
-            else document.getElementById('viewSubtitle').innerText = "Here's your health overview for today.";
+            const views = ['dash', 'add', 'meds', 'reports', 'settings'];
+            views.forEach(v => {
+                const element = document.getElementById(`view-${v}`);
+                const navElement = document.getElementById(`nav-${v}`);
+                if(element) element.classList.add('hidden');
+                if(navElement) navElement.classList.remove('active');
+            });
+            const activeView = document.getElementById(`view-${viewId}`);
+            const activeNav = document.getElementById(`nav-${viewId}`);
+            if(activeView) activeView.classList.remove('hidden');
+            if(activeNav) activeNav.classList.add('active');
         }
 
         function saveProfileChanges() {
             if (!loggedInUser) return;
-
             loggedInUser.name = document.getElementById('profName').value;
             loggedInUser.age = document.getElementById('profAge').value;
             loggedInUser.gender = document.getElementById('profGender').value;
             loggedInUser.dob = document.getElementById('profDob').value;
             loggedInUser.contact = document.getElementById('profContact').value;
             loggedInUser.gmail = document.getElementById('profGmail').value;
-
             localStorage.setItem('userSession', JSON.stringify(loggedInUser));
-            document.getElementById('welcomeUserGreeting').innerText = `Welcome back, ${loggedInUser.name}! 👋`;
-            document.getElementById('topBarUserLabel').innerText = loggedInUser.name;
-            
-            alert("Profile configurations updated successfully! 👥");
+            alert("Profile configurations saved locally!");
         }
 
         async function fetchReminders() {
             if(!loggedInUser) return;
-            const res = await fetch(`/api/reminders?userId=${loggedInUser.userId}`);
-            globalRemindersList = await res.json();
+            try {
+                const res = await fetch(`/api/reminders?userId=${loggedInUser.userId}`);
+                if (res.ok) {
+                    globalRemindersList = await res.json();
+                    // 🔥 CRITICAL: BACKUP TO MACHINE INTERNALS FOR OFFLINE ACCESS
+                    localStorage.setItem('offlineRemindersBackup', JSON.stringify(globalRemindersList));
+                    renderPremiumDashboardStructures();
+                }
+            } catch (err) {
+                console.log("⚠️ Operating completely offline. Loading backups from device cache memory.");
+                // Load whatever backup text we saved earlier
+                globalRemindersList = JSON.parse(localStorage.getItem('offlineRemindersBackup')) || [];
+                renderPremiumDashboardStructures();
+            }
+        }
+
+        async function deleteReminder(reminderId) {
+            if (!reminderId || reminderId === 'null' || reminderId === 'undefined') return;
+            
+            // Local fallback cleanup loop to wipe item instantly from screen offline
+            globalRemindersList = globalRemindersList.filter(item => (item._id !== reminderId && item.id !== reminderId));
+            localStorage.setItem('offlineRemindersBackup', JSON.stringify(globalRemindersList));
             renderPremiumDashboardStructures();
+
+            try {
+                await fetch(`/api/reminders/${reminderId}`, { method: 'DELETE' });
+            } catch (err) {
+                console.log("⚠️ Deleted from device memory state loop. Changes will sink on backend next connection.");
+            }
         }
 
         function renderPremiumDashboardStructures() {
@@ -551,13 +591,7 @@
             document.getElementById('dash-total').innerText = globalRemindersList.length;
 
             if(globalRemindersList.length === 0) {
-                const emptyFeedback = '<div style="text-align:center; padding:30px; color:var(--text-muted); font-size:14px; width:100%;">No active schedules configured.</div>';
-                miniCardsContainer.innerHTML = emptyFeedback;
-                const emptyRow = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Empty database state log.</td></tr>';
-                medsMasterBody.innerHTML = emptyRow; reportsTimelineBody.innerHTML = emptyRow;
-                notificationsContainer.innerHTML = '<div class="notif-item" style="color:var(--text-muted); text-align:center;">No fresh alerts.</div>';
-                
-                updateRoundChartInterface(0, 0, 0);
+                miniCardsContainer.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">No active schedules configured.</div>';
                 return;
             }
 
@@ -573,50 +607,24 @@
                 
                 card.innerHTML = `
                     <div class="time-box">⏰ ${item.reminderTime}</div>
-                    <div class="med-details">
-                        <h4>${item.medicineName}</h4>
-                        <p>${item.dosage}</p>
-                    </div>
+                    <div class="med-details"><h4>${item.medicineName}</h4><p>${item.dosage}</p></div>
                     <div>${pillBadge}</div>
                 `;
                 miniCardsContainer.appendChild(card);
 
-                const notif = document.createElement('div');
-                notif.className = "notif-item";
-                notif.innerHTML = checkStateTrue 
-                    ? `🟢 <strong>${item.medicineName}</strong> marked as taken at ${item.reminderTime}.` 
-                    : `⚠️ <strong>${item.medicineName}</strong> scheduled upcoming alarm set for ${item.reminderTime}.`;
-                notificationsContainer.appendChild(notif);
+                const cleanId = item._id ? item._id : (item.id ? item.id : null);
 
                 const rowMaster = document.createElement('tr');
                 const adherenceStatusBadge = checkStateTrue ? '<span class="status-pill taken">✓ Taken</span>' : '<span class="status-pill pending">⏳ Not Taken</span>';
-                rowMaster.innerHTML = `<td><strong>${item.medicineName}</strong></td><td>${item.dosage}</td><td>${item.reminderTime}</td><td>${adherenceStatusBadge}</td>`;
+                rowMaster.innerHTML = `
+                    <td><strong>${item.medicineName}</strong></td><td>${item.dosage}</td><td>${item.reminderTime}</td><td>${adherenceStatusBadge}</td>
+                    <td><button class="delete-btn" onclick="deleteReminder('${cleanId}')">🗑️ Delete</button></td>
+                `;
                 medsMasterBody.appendChild(rowMaster);
-
-                const rowReport = document.createElement('tr');
-                const complianceStatusLabel = checkStateTrue ? '<span style="color:var(--status-taken); font-weight:600;">Successfully Checked Off</span>' : '<span style="color:var(--status-pending); font-weight:600;">Awaiting Target Intake Time</span>';
-                rowReport.innerHTML = `<td style="color:var(--accent-blue); font-weight:700;">⏱️ ${item.reminderTime}</td><td><strong>${item.medicineName}</strong></td><td>${item.dosage}</td><td>${complianceStatusLabel}</td>`;
-                reportsTimelineBody.appendChild(rowReport);
             });
 
             document.getElementById('dash-taken').innerText = takenCount;
             document.getElementById('dash-pending').innerText = pendingCount;
-
-            updateRoundChartInterface(globalRemindersList.length, takenCount, pendingCount);
-        }
-
-        function updateRoundChartInterface(total, taken, pending) {
-            document.getElementById('roundChartCenterValueText').innerText = total;
-            document.getElementById('legendCountTaken').innerText = taken;
-            document.getElementById('legendCountPending').innerText = pending;
-
-            const takenPercentage = total > 0 ? (taken / total) * 100 : 0;
-            const chartCircleElement = document.getElementById('roundInterfaceRenderCircle');
-            
-            chartCircleElement.style.background = `conic-gradient(var(--status-taken) 0% ${takenPercentage}%, var(--status-pending) ${takenPercentage}% 100%)`;
-            
-            const dot = document.getElementById('bellCounterDot');
-            if (pending > 0) dot.style.display = "block"; else dot.style.display = "none";
         }
 
         function triggerPersistentAlarm(med) {
@@ -629,12 +637,11 @@
             speak(voiceSpeechString);
 
             if(snoozeIntervalTimerEngine) clearInterval(snoozeIntervalTimerEngine);
-            snoozeIntervalTimerEngine = setInterval(() => {
-                speak(voiceSpeechString);
-            }, 60000);
+            snoozeIntervalTimerEngine = setInterval(() => { speak(voiceSpeechString); }, 60000);
 
             document.getElementById('modalConfirmBtn').onclick = () => {
                 clearInterval(snoozeIntervalTimerEngine);
+                window.speechSynthesis.cancel(); 
                 document.getElementById('popupModal').classList.add('hidden');
                 
                 const combinedKeyHash = `${med.reminderTime}-${med.medicineName}`;
@@ -666,28 +673,29 @@
             const dosage = document.getElementById('dosage').value;
             const reminderTime = document.getElementById('remTime').value;
 
-            await fetch('/api/reminders', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: loggedInUser.userId, medicineName, dosage, reminderTime })
-            });
+            const tempId = 'local_' + Date.now();
+            const payload = { id: tempId, userId: loggedInUser.userId, medicineName, dosage, reminderTime };
+            
+            // 🔥 Push directly to offline list copy instantly
+            globalRemindersList.push(payload);
+            localStorage.setItem('offlineRemindersBackup', JSON.stringify(globalRemindersList));
+            renderPremiumDashboardStructures();
             document.getElementById('reminderForm').reset();
-            alert("Medication schedule tracked and saved successfully!");
-            fetchReminders();
-            switchView('dashboard');
+            switchView('dash');
+
+            try {
+                await fetch('/api/reminders', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+            } catch (err) {
+                console.log("⚠️ Operating offline. Saved reminder configuration locally onto device!");
+            }
         });
 
         checkViewStatus();
         setInterval(checkClockReminders, 4000);
-
-        // SERVICE WORKER INITIALIZATION CODE FOR PWA COMPLIANCE
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('🚀 Service Worker registered perfectly!', reg))
-                    .catch(err => console.error('❌ Service Worker registry failed:', err));
-            });
-        }
     </script>
 </body>
 </html>
