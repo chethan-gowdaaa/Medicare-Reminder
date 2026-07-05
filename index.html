@@ -179,28 +179,67 @@
 
         .footer-credit { text-align: center; color: var(--text-muted); font-size: 13px; margin-top: auto; padding-top: 30px; }
 
-        /* 📱 Mobile Responsiveness for Android & iOS */
+        /* 📱 Complete Responsive View for Android & iOS */
 @media (max-width: 768px) {
-    /* 1. Stack or collapse the main layout wrapper */
-    body, .main-content-wrapper, div[style*='display: flex'] { 
-        flex-direction: column !important;
+    /* 1. Force the main wrapper structure to fit exactly into the window viewport */
+    body, html {
+        overflow-x: hidden !important;
+        width: 100% !important;
     }
 
-    /* 2. Make the sidebar span full width or turn it into a top bar */
+    /* Target whatever main container holds your sidebar and view panels */
+    .main-content-wrapper, div[style*="display: flex"], body > div { 
+        flex-direction: column !important;
+        width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    /* 2. Turn the wide sidebar into a compact, row-based navigation bar at the top */
     #sidebar, .sidebar, div.panel:first-child {
         width: 100% !important;
         min-width: 100% !important;
         height: auto !important;
         position: relative !important;
+        padding: 10px !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        gap: 5px !important;
     }
 
-    /* 3. Give the dashboard views full room to display neatly */
+    /* Shrink navigation items so they sit next to each other in a clean menu layout */
+    #sidebar a, .sidebar button, #sidebar .nav-item {
+        padding: 6px 10px !important;
+        font-size: 13px !important;
+        margin: 0 !important;
+        display: inline-flex !important;
+    }
+
+    /* Hide unnecessary text/branding on mobile to save screen real estate */
+    #sidebar .logo, .sidebar h2, .sidebar p, #sidebar hr {
+        display: none !important;
+    }
+
+    /* 3. Expand the main content panel to fit the phone's borders perfectly */
     .view-panel, #appDashboard, .panel {
         width: 100% !important;
         max-width: 100% !important;
+        min-width: 100% !important;
+        box-sizing: border-box !important;
         margin: 0 !important;
-        padding: 15px !important;
+        padding: 12px !important;
     }
+
+    /* Make grid cards resize cleanly on small displays */
+    .grid, .card-container, div[style*="grid"] {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+}
+
 }
     
     </style>
