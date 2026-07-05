@@ -11,18 +11,11 @@ dns.setServers(['8.8.8.8', '8.8.4.4']);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// 💾 YOUR CLEAN CLOUD DATABASE LINK
 const dbURI = process.env.MONGODB_URI;
-mongoose.connect(dbURI);
 
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname)));
-
-// Connect securely to MongoDB Atlas Cloud
-mongoose.connect(MONGO_URI)
-    .then(() => console.log("💾 Successfully connected to MongoDB Atlas Cloud Database!"))
-    .catch(err => console.error("❌ MongoDB connection error:", err));
-
+mongoose.connect(dbURI)
+  .then(() => console.log("🚀 Successfully connected to MongoDB Atlas Cloud!"))
+  .catch(err => console.error("❌ MongoDB connection error: ", err));
 // Define User Database Schema
 const UserSchema = new mongoose.Schema({
     name: String,
