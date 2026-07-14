@@ -639,7 +639,7 @@
         async function fetchReminders() {
             if(!loggedInUser) return;
             try {
-                const res = await fetch(`https://medicare-reminder-nxkd.onrender.com/api/reminders?userId=${loggedInUser.userId}`);
+                const res = await fetch(`/api/reminders?userId=${loggedInUser.userId}`);
                 if (res.ok) {
                     globalRemindersList = await res.json();
                     // 🔥 CRITICAL: BACKUP TO MACHINE INTERNALS FOR OFFLINE ACCESS
@@ -663,7 +663,7 @@
             renderPremiumDashboardStructures();
 
             try {
-                await fetch(`https://medicare-reminder-nxkd.onrender.com/api/reminders/${reminderId}`, { method: 'DELETE' });
+                await fetch(`/api/reminders/${reminderId}`, { method: 'DELETE' });
             } catch (err) {
                 console.log("⚠️ Deleted from device memory state loop. Changes will sink on backend next connection.");
             }
@@ -684,6 +684,8 @@
 
             if(globalRemindersList.length === 0) {
                 miniCardsContainer.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">No active schedules configured.</div>';
+                notificationsContainer.innerHTML = '<div class="notif-item" style="color:var(--text-muted); text-align:center;">No active schedules.</div>';
+                reportsTimelineBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">No active schedules to generate report.</td></tr>';
                 return;
             }
 
@@ -713,6 +715,29 @@
                     <td><button class="delete-btn" onclick="deleteReminder('${cleanId}')">🗑️ Delete</button></td>
                 `;
                 medsMasterBody.appendChild(rowMaster);
+
+                // Populate Diagnostic Reports
+                const rowReport = document.createElement('tr');
+                const reportComplianceText = checkStateTrue ? '<span class="status-pill taken">✓ Fully Adhered</span>' : '<span class="status-pill pending">⏳ Non-compliant (Missed)</span>';
+                rowReport.innerHTML = `
+                    <td>Today, ${item.reminderTime}</td>
+                    <td><strong>${item.medicineName}</strong></td>
+                    <td>${item.dosage}</td>
+                    <td>${reportComplianceText}</td>
+                `;
+                reportsTimelineBody.appendChild(rowReport);
+
+                // Populate Notifications Logs Dropdown
+                const notifItem = document.createElement('div');
+                notifItem.className = 'notif-item';
+                if (checkStateTrue) {
+                    notifItem.innerHTML = `🎉 Taken: <strong>${item.medicineName}</strong> at ${item.reminderTime}`;
+                    notifItem.style.color = 'var(--status-taken)';
+                } else {
+                    notifItem.innerHTML = `⏳ Scheduled: <strong>${item.medicineName}</strong> at ${item.reminderTime}`;
+                    notifItem.style.color = 'var(--status-pending)';
+                }
+                notificationsContainer.appendChild(notifItem);
             });
 
             document.getElementById('dash-taken').innerText = takenCount;
@@ -776,7 +801,7 @@
             switchView('dash');
 
             try {
-                await fetch('https://medicare-reminder-nxkd.onrender.com/api/reminders', {
+                await fetch('/api/reminders', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
